@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  emqx:
+    image: emqx/emqx-ee:4.4.18
+    container_name: emqx
+    hostname: emqx
+    ports:
+      - "1883:1883"
+      - "18083:18083"
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    hostname: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  publisher:
+    build:
+      context: ./publisher
+    container_name: publisher
+    hostname: publisher
+    depends_on:
+      - emqx
+    environment:
+      BROKER: emqx
+      PORT: 1883
+
+  subscriber:
+    build:
+      context: ./subscriber
+    container_name: subscriber
+    hostname: subscriber
+    depends_on:
+      - emqx
+      - mongodb
+    environment:
+      BROKER: emqx
+      PORT: 1883
+      MONGO_URI: mongodb://admin:password@mongodb:27017
+
+  dashboard:
+    build:
+      context: ./dashboard
+    container_name: dashboard
+    hostname: dashboard
+    depends_on:
+      - mongodb
+    ports:
+      - "8501:8501"
+    environment:
+      MONGO_URI: mongodb://admin:password@mongodb:27017
