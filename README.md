@@ -11,9 +11,11 @@ Open [http://localhost:8501](http://localhost:8501) with your browser to see the
 
 ## What each code does 
 
-### publisher: publish data to MQTT in UNS format
-### subscriber: publish data to MongoDB from MQTT
-### dashbord: display the KPI from UNS
+```bash
+ publisher: publish data to MQTT in UNS format
+ subscriber: publish data to MongoDB from MQTT
+ dashbord: display the KPI from UNS
+```
 
 ## How to stop 
 ```bash
